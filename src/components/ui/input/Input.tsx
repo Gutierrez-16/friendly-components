@@ -47,41 +47,42 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       : "border-b-[var(--primary-light)]";
     const finalClasses = isPassword ? `${baseClasses} pr-8 ${borderClass}` : `${baseClasses} ${borderClass}`;
 
-    const validateValue = (value: string) => {
-      let errorDetected = false;
+    const validateValue = (value: string): string => {
       let errorText = "";
       if (required && !value) {
-        errorDetected = true;
         errorText = "Field is required";
-      }
-      if (props.minLength !== undefined && value.length < props.minLength) {
-        errorDetected = true;
+      } else if (props.minLength !== undefined && value.length < props.minLength) {
         errorText = `Minimum length is ${props.minLength} characters`;
-      }
-      if (props.maxLength !== undefined && value.length > props.maxLength) {
-        errorDetected = true;
+      } else if (props.maxLength !== undefined && value.length > props.maxLength) {
         errorText = `Maximum length is ${props.maxLength} characters`;
-      }
-      if (isEmail && value) {
+      } else if (isEmail && value) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
-          errorDetected = true;
           errorText = "Invalid email";
         }
       }
-      setHasError(errorDetected);
+      setHasError(!!errorText);
       setLocalErrorMessage(errorText);
+      return errorText;
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      validateValue(e.target.value);
+      const error = validateValue(e.target.value);
+      e.target.setCustomValidity(error);
       props.onBlur?.(e);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      validateValue(e.target.value);
+      let newValue = e.target.value;
+      if (props.maxLength !== undefined && newValue.length > props.maxLength) {
+        newValue = newValue.slice(0, props.maxLength);
+        e.target.value = newValue;
+      }
+      const error = validateValue(newValue);
+      e.target.setCustomValidity(error);
       props.onChange?.(e);
     };
+    
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if ((isDecimal || isNumber) && e.key === "-") {
