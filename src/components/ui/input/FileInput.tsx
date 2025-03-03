@@ -18,6 +18,17 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       hasError ? "border-[var(--error-main)]" : "border-[var(--primary-light)]"
     } ${className}`;
 
+    const validate = (files: FileList | null) => {
+      let errorDetected = false;
+      let errorText = "";
+      if (required && (!files || files.length === 0)) {
+        errorDetected = true;
+        errorText = "Field is required";
+      }
+      setHasError(errorDetected);
+      setLocalErrorMessage(errorText);
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
       if (files && files[0]) {
@@ -44,15 +55,10 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       }
     };
 
-    const validate = (files: FileList | null) => {
-      let errorDetected = false;
-      let errorText = "";
-      if (required && (!files || files.length === 0)) {
-        errorDetected = true;
-        errorText = "Field is required";
-      }
-      setHasError(errorDetected);
-      setLocalErrorMessage(errorText);
+    // Maneja el evento onInvalid para evitar el mensaje nativo y setear el error personalizado
+    const handleInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      validate(e.target.files);
     };
 
     return (
@@ -68,7 +74,11 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           <div className="mb-2">
             <img src={previewUrl} alt="Preview" className="h-24 object-contain rounded-md" />
             <div className="flex items-center justify-between mt-1">
-              <span className="text-sm text-[var(--primary-dark)] truncate">
+              <span
+                className={`text-sm truncate ${
+                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-dark)]"
+                }`}
+              >
                 {file?.name}
               </span>
               <button type="button" onClick={handleClear} className="focus:outline-none">
@@ -82,14 +92,23 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
               ref={ref}
               type="file"
               required={required}
+              onInvalid={handleInvalid}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               {...props}
               onChange={handleChange}
             />
             <div className="flex-1 flex items-center space-x-2">
-              <Upload className="h-5 w-5 text-[var(--primary-light)]" />
-              <span className="text-sm text-[var(--primary-light)]">
-                Chosse
+              <Upload
+                className={`h-5 w-5 ${
+                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-light)]"
+                }`}
+              />
+              <span
+                className={`text-sm ${
+                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-light)]"
+                }`}
+              >
+                Choose
               </span>
             </div>
           </div>

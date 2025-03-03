@@ -82,13 +82,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       e.target.setCustomValidity(error);
       props.onChange?.(e);
     };
-    
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if ((isDecimal || isNumber) && e.key === "-") {
         e.preventDefault();
       }
       props.onKeyDown?.(e);
+    };
+
+    // Se agrega onInvalid para capturar el evento y evitar el mensaje nativo
+    const handleInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const error = validateValue(e.target.value);
+      e.target.setCustomValidity(error);
     };
 
     return (
@@ -110,6 +116,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onBlur={handleBlur}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onInvalid={handleInvalid}
           />
           {isPassword && (
             <button
