@@ -14,8 +14,8 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     const [file, setFile] = React.useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = React.useState<string>("");
 
-    const containerClasses = `relative flex items-center border rounded-md px-3 py-2 transition-colors focus-within:border-[var(--primary-main)] ${
-      hasError ? "border-[var(--error-main)]" : "border-[var(--primary-light)]"
+    const containerClasses = `relative flex items-center rounded-md px-3 py-2 transition-colors focus-within:border-primary border-solid ${
+      hasError ? "border-error" : "border-primary-light"
     } ${className}`;
 
     const validate = (files: FileList | null) => {
@@ -55,7 +55,6 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       }
     };
 
-    // Maneja el evento onInvalid para evitar el mensaje nativo y setear el error personalizado
     const handleInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
       e.preventDefault();
       validate(e.target.files);
@@ -64,9 +63,9 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     return (
       <div className="mb-4">
         {label && (
-          <label className="block text-sm text-[var(--primary-dark)] mb-1">
+          <label className="block text-sm text-primary-dark mb-1">
             {label}
-            {required && <span className="ml-1 text-[var(--error-main)]">*</span>}
+            {required && <span className="ml-1 text-error">*</span>}
           </label>
         )}
 
@@ -74,15 +73,11 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           <div className="mb-2">
             <img src={previewUrl} alt="Preview" className="h-24 object-contain rounded-md" />
             <div className="flex items-center justify-between mt-1">
-              <span
-                className={`text-sm truncate ${
-                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-dark)]"
-                }`}
-              >
+              <span className={`text-sm truncate ${hasError ? "text-error" : "text-primary-dark"}`}>
                 {file?.name}
               </span>
               <button type="button" onClick={handleClear} className="focus:outline-none">
-                <Trash2 className="h-5 w-5 text-[var(--error-main)]" />
+                <Trash2 className="h-5 w-5 text-error" />
               </button>
             </div>
           </div>
@@ -98,23 +93,15 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
               onChange={handleChange}
             />
             <div className="flex-1 flex items-center space-x-2">
-              <Upload
-                className={`h-5 w-5 ${
-                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-light)]"
-                }`}
-              />
-              <span
-                className={`text-sm ${
-                  hasError ? "text-[var(--error-main)]" : "text-[var(--primary-light)]"
-                }`}
-              >
+              <Upload className={`h-5 w-5 ${hasError ? "text-error" : "text-primary-light"}`} />
+              <span className={`text-sm ${hasError ? "text-error" : "text-primary-light"}`}>
                 Choose
               </span>
             </div>
           </div>
         )}
         {hasError && (
-          <p className="mt-1 text-xs text-[var(--error-main)]">
+          <p className="mt-1 text-xs text-error">
             {errorMessage || localErrorMessage}
           </p>
         )}

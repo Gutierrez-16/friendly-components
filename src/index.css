@@ -26,67 +26,46 @@
   --success-dark: #39b940;
 }
 
-
 @layer utilities {
-    .bg-primary {
-      background-color: var(--primary);
-    }
-    .bg-primary-light {
-      background-color: var(--primary-light);
-    }
-    .bg-primary-dark {
-      background-color: var(--primary-dark);
-    }
-    .bg-secondary {
-      background-color: var(--secondary);
-    }
-    .bg-secondary-light {
-      background-color: var(--secondary-light);
-    }
-    .bg-secondary-dark {
-      background-color: var(--secondary-dark);
-    }
-    .bg-error {
-      background-color: var(--error);
-    }
-    .bg-warning {
-      background-color: var(--warning);
-    }
-    .bg-info {
-      background-color: var(--info);
-    }
-    .bg-success {
-      background-color: var(--success);
-    }
-    .text-primary {
-      color: var(--primary);
-    }
-    .text-primary-light {
-      color: var(--primary-light);
-    }
-    .text-primary-dark {
-      color: var(--primary-dark);
-    }
-    .text-secondary {
-      color: var(--secondary);
-    }
-    .text-secondary-light {
-      color: var(--secondary-light);
-    }
-    .text-secondary-dark {
-      color: var(--secondary-dark);
-    }
-    .text-error {
-      color: var(--error);
-    }
-    .text-warning {
-      color: var(--warning);
-    }
-    .text-info {
-      color: var(--info);
-    }
-    .text-success {
-      color: var(--success);
-    }
+  /* Backgrounds */
+  .bg-primary { background-color: var(--primary-main); }
+  .bg-primary-light { background-color: var(--primary-light); }
+  .bg-primary-dark { background-color: var(--primary-dark); }
+  .bg-secondary { background-color: var(--secondary-main); }
+  .bg-secondary-light { background-color: var(--secondary-light); }
+  .bg-secondary-dark { background-color: var(--secondary-dark); }
+  .bg-error { background-color: var(--error-main); }
+  .bg-warning { background-color: var(--warning-main); }
+  .bg-info { background-color: var(--info-main); }
+  .bg-success { background-color: var(--success-main); }
+
+  /* Textos */
+  .text-primary { color: var(--primary-main); }
+  .text-primary-light { color: var(--primary-light); }
+  .text-primary-dark { color: var(--primary-dark); }
+  .text-secondary { color: var(--secondary-main); }
+  .text-secondary-light { color: var(--secondary-light); }
+  .text-secondary-dark { color: var(--secondary-dark); }
+  .text-error { color: var(--error-main); }
+  .text-warning { color: var(--warning-main); }
+  .text-info { color: var(--info-main); }
+  .text-success { color: var(--success-main); }
+
+  /* Bordes */
+  .border-b-primary-light {
+    border-bottom: 1px solid var(--primary-light);
   }
-  
+  .border-b-error {
+    border-bottom: 1px solid var(--error-main);
+  }
+  .border-primary-light {
+    border: 1px solid var(--primary-light);
+  }
+  .border-error {
+    border: 1px solid var(--error-main);
+  }
+  /* Focus */
+  .focus\:border-primary:focus {
+    border-color: var(--primary-main);
+  }
+}

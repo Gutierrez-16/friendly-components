@@ -40,15 +40,15 @@ const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
 
     const baseClasses = [
       "w-4 h-4",
-      "border",
+      "border border-primary-light",
       "rounded-full",
-      "focus:ring-[var(--primary-main)]",
+      "focus:ring focus:ring-primary",
       className,
     ].join(" ");
 
     return (
       <div className="mb-4">
-        <label className="inline-flex items-center space-x-2 text-sm text-[var(--primary-dark)]">
+        <label className="inline-flex items-center space-x-2 text-sm text-primary-dark">
           <input
             ref={ref}
             type="radio"
@@ -62,7 +62,7 @@ const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
           {label && <span>{label}</span>}
         </label>
         {hasError && (
-          <p className="mt-1 text-xs text-[var(--error-main)]">
+          <p className="mt-1 text-xs text-error">
             {errorMessage || localErrorMessage}
           </p>
         )}

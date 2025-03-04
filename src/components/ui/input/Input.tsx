@@ -38,27 +38,27 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const baseClasses = [
       "w-full bg-transparent text-sm py-2 px-0 outline-none",
-      "border-b transition-colors focus:outline-none focus:border-[var(--primary-main)]",
+      "border-b border-b-primary-light transition-colors focus:outline-none focus:border-primary",
       "disabled:cursor-not-allowed disabled:opacity-50",
       className,
     ].join(" ");
-    const borderClass = hasError
-      ? "border-b-[var(--error-main)]"
-      : "border-b-[var(--primary-light)]";
-    const finalClasses = isPassword ? `${baseClasses} pr-8 ${borderClass}` : `${baseClasses} ${borderClass}`;
+    const borderClass = hasError ? "border-b-error" : "border-b-primary-light";
+    const finalClasses = isPassword
+      ? `${baseClasses} pr-8 ${borderClass}`
+      : `${baseClasses} ${borderClass}`;
 
     const validateValue = (value: string): string => {
       let errorText = "";
       if (required && !value) {
-        errorText = "Field is required";
+        errorText = "Campo requerido";
       } else if (props.minLength !== undefined && value.length < props.minLength) {
-        errorText = `Minimum length is ${props.minLength} characters`;
+        errorText = `La longitud mínima es de ${props.minLength} caracteres`;
       } else if (props.maxLength !== undefined && value.length > props.maxLength) {
-        errorText = `Maximum length is ${props.maxLength} characters`;
+        errorText = `La longitud máxima es de ${props.maxLength} caracteres`;
       } else if (isEmail && value) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
-          errorText = "Invalid email";
+          errorText = "Email inválido";
         }
       }
       setHasError(!!errorText);
@@ -90,7 +90,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       props.onKeyDown?.(e);
     };
 
-    // Se agrega onInvalid para capturar el evento y evitar el mensaje nativo
     const handleInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
       e.preventDefault();
       const error = validateValue(e.target.value);
@@ -100,15 +99,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="mb-4">
         {label && (
-          <label className="block text-sm text-[var(--primary-dark)] mb-1">
+          <label className="block text-sm text-primary-dark mb-1">
             {label}
-            {required && <span className="ml-1 text-[var(--error-main)]">*</span>}
+            {required && <span className="ml-1 text-error">*</span>}
           </label>
         )}
         <div className="relative">
           <input
             ref={ref}
-            type={isPassword ? (showPassword ? "text" : "password") : baseType}
+            type={baseType}
             {...extraProps}
             {...props}
             required={required}
@@ -125,15 +124,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className="absolute right-0 top-1/2 -translate-y-1/2 pr-1 focus:outline-none"
             >
               {showPassword ? (
-                <EyeOff className="h-4 w-4 text-[var(--primary-light)]" />
+                <EyeOff className="h-4 w-4 text-primary-light" />
               ) : (
-                <Eye className="h-4 w-4 text-[var(--primary-light)]" />
+                <Eye className="h-4 w-4 text-primary-light" />
               )}
             </button>
           )}
         </div>
         {hasError && (
-          <p className="mt-1 text-xs text-[var(--error-main)]">
+          <p className="mt-1 text-xs text-error">
             {errorMessage || localErrorMessage}
           </p>
         )}
