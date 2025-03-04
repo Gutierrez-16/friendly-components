@@ -68,4 +68,16 @@
   .focus\:border-primary:focus {
     border-color: var(--primary-main);
   }
+
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+  }
+  
+  .backdrop-saturate-150 {
+    backdrop-filter: saturate(150%);
+  }
+  
+  .bg-opacity-90 {
+    --tw-bg-opacity: 0.9;
+  }
 }
