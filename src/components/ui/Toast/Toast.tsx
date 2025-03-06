@@ -51,7 +51,7 @@ const Toast: React.FC<ToastProps> = ({
   };
 
   const getToastStyles = () => {
-    const baseStyles = "fixed w-[360px] min-h-[48px] p-4 rounded-lg shadow-lg border flex items-center gap-3 backdrop-blur-sm backdrop-saturate-150 bg-opacity-90 transition-all duration-300 ease-in-out";
+    const baseStyles = "fixed z-50 w-[360px] min-h-[48px] p-4 rounded-lg shadow-lg border flex items-center gap-3 backdrop-blur-sm backdrop-saturate-150 bg-opacity-90 transition-all duration-300 ease-in-out";
     
     const typeStyles = {
       primary: "bg-primary text-white border-primary-light",
