@@ -13,7 +13,7 @@ interface CalendarProps {
   onChange: (date: Date) => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({
+export const Calendar: React.FC<CalendarProps> = ({
   value,
   label,
   required,
@@ -329,5 +329,3 @@ const Calendar: React.FC<CalendarProps> = ({
     </div>
   );
 };
-
-export default Calendar;

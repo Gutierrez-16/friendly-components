@@ -7,7 +7,7 @@ interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   preview?: boolean;
 }
 
-const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
+export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   ({ label, errorMessage, className = "", required, preview = true, ...props }, ref) => {
     const [hasError, setHasError] = React.useState(false);
     const [localErrorMessage, setLocalErrorMessage] = React.useState("");
@@ -110,5 +110,3 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   }
 );
 
-FileInput.displayName = "FileInput";
-export default FileInput;

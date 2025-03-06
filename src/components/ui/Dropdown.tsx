@@ -15,7 +15,7 @@ interface DropdownProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
   className?: string;
 }
 
-const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
+export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
   (
     {
       label = "Label",
@@ -278,5 +278,3 @@ const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
   }
 );
 
-Dropdown.displayName = "Dropdown";
-export default Dropdown;

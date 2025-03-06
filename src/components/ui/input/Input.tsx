@@ -7,7 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     { variant = "default", label, errorMessage, className = "", required, ...props },
     ref
@@ -141,5 +141,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = "Input";
-export default Input;
+

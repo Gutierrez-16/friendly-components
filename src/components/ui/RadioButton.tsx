@@ -5,7 +5,7 @@ interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
+export const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
   ({ label, errorMessage, required, className = "", ...props }, ref) => {
     const [hasError, setHasError] = React.useState(false);
     const [localErrorMessage, setLocalErrorMessage] = React.useState("");
@@ -71,5 +71,3 @@ const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
   }
 );
 
-RadioButton.displayName = "RadioButton";
-export default RadioButton;

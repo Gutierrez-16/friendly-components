@@ -1,7 +1,8 @@
+// src/components/ui/Toast/providers/ToastProvider.tsx
 import React, { createContext, useState } from "react";
 import { ToastType, ToastPosition } from "../types/toast";
 
-interface ToastContextType {
+export interface ToastContextType {
   showToast: boolean;
   toastMessage: string;
   toastType: ToastType;

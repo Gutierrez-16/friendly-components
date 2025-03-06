@@ -1,8 +1,17 @@
 {
-  "name": "friendly-components",
-  "private": true,
-  "version": "0.0.0",
+  "name": "j2ra",
+  "version": "0.0.1",
   "type": "module",
+    "files": ["dist"],
+  "main": "./dist/j2ra.umd.cjs",
+  "module": "./dist/j2ra.js",
+  "exports": {
+    ".": {
+      "import": "./dist/j2ra.js",
+      "require": "./dist/j2ra.umd.cjs"
+    },
+    "./dist/j2ra.css": "./dist/j2ra.css"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,13 +21,22 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
     "lucide-react": "^0.477.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.2.0",
     "tailwindcss": "^4.0.9"
   },
+  "peerdependencies": {
+    "@tailwindcss/vite": "^4.0.9",
+    "lucide-react": "^0.477.0",
+    "tailwindcss": "^4.0.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite-plugin-dts": "^4.5.3"
+  },
   "devDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite-plugin-dts": "^4.5.3",
     "@eslint/js": "^9.21.0",
+    "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

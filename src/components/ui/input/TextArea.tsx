@@ -5,7 +5,7 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   errorMessage?: string;
 }
 
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, errorMessage, className = "", required, ...props }, ref) => {
     const [hasError, setHasError] = React.useState(false);
     const [localErrorMessage, setLocalErrorMessage] = React.useState("");
@@ -77,6 +77,3 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     );
   }
 );
-
-TextArea.displayName = "TextArea";
-export default TextArea;

@@ -6,7 +6,7 @@ interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   defaultValues?: Record<string, any>;
 }
 
-const Form = React.forwardRef<HTMLFormElement, FormProps>(
+export const Form = React.forwardRef<HTMLFormElement, FormProps>(
   ({ children, onSubmit, validate, defaultValues = {}, ...props }, ref) => {
     const formRef = React.useRef<HTMLFormElement>(null);
 
@@ -52,6 +52,3 @@ const Form = React.forwardRef<HTMLFormElement, FormProps>(
     );
   }
 );
-
-Form.displayName = "Form";
-export default Form;

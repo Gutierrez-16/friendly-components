@@ -5,7 +5,7 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, errorMessage, required, className = "", ...props }, ref) => {
     const [hasError, setHasError] = React.useState(false);
     const [localErrorMessage, setLocalErrorMessage] = React.useState("");
@@ -70,5 +70,4 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   }
 );
 
-Checkbox.displayName = "Checkbox";
-export default Checkbox;
+
