@@ -17,3 +17,6 @@ export { default as Toast } from './components/ui/Toast/Toast';
 export { ToastContainer } from './components/ui/Toast/ToastContainer';
 export { useToast } from './hooks/useToast';
 export type { ToastType, ToastPosition } from './components/ui/Toast/types/toast';
+export { Pagination } from './components/ui/Pagination';
+export { InputSearch } from './components/ui/input/InputSearch';
+export {Tabs} from './components/ui/Tabs';
