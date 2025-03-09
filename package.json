@@ -1,6 +1,6 @@
 {
   "name": "j2ra",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
     "files": ["dist"],
   "main": "./dist/j2ra.umd.cjs",

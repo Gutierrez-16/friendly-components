@@ -41,3 +41,6 @@ export { Pagination } from "./components/ui/Pagination";
 export { InputSearch } from "./components/ui/input/InputSearch";
 export { Tabs } from "./components/ui/Tabs";
 export { Sidebar } from "./components/ui/Sidebar";
+export { Navbar } from "./components/ui/Navbar";
+export { Profile } from "./components/ui/Profile";
+export { Avatar } from "./components/ui/Avatar";
