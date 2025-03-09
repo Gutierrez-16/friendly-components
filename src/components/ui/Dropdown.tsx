@@ -1,14 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface DropdownProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> {
+interface DropdownProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "value" | "onChange"
+  > {
   label?: string;
   errorMessage?: string;
   options: { value: string; label: string }[];
-  onChange?: (selectedValue: string) => void;
+  onChange?: any;
   onSearch?: (search: string) => void;
   onScrollBottom?: () => void;
   value?: string;
+  placeholder?: string;
   name?: string;
   required?: boolean;
   searchable?: boolean;
@@ -19,6 +24,7 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
   (
     {
       label = "Label",
+      placeholder,
       errorMessage,
       options,
       onChange,
@@ -33,9 +39,16 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
     },
     ref
   ) => {
-    const initialSelected = value ? options.find(opt => opt.value === value) || null : null;
-    const [selectedOption, setSelectedOption] = useState<{ value: string; label: string } | null>(initialSelected);
-    const [inputValue, setInputValue] = useState<string>(initialSelected ? initialSelected.label : "");
+    const initialSelected = value
+      ? options.find((opt) => opt.value === value) || null
+      : null;
+    const [selectedOption, setSelectedOption] = useState<{
+      value: string;
+      label: string;
+    } | null>(initialSelected);
+    const [inputValue, setInputValue] = useState<string>(
+      initialSelected ? initialSelected.label : ""
+    );
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [localErrorMessage, setLocalErrorMessage] = useState<string>("");
@@ -47,10 +60,29 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
     const hiddenRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-      if (value) {
-        setLocalErrorMessage("");
+      if (!value) {
+        setSelectedOption(null);
+        setInputValue("");
       }
     }, [value]);
+
+    useEffect(() => {
+      // Buscar el formulario más cercano
+      const form = containerRef.current?.closest("form");
+
+      if (!form) return;
+
+      const handleReset = () => {
+        setSelectedOption(null);
+        setInputValue("");
+      };
+
+      form.addEventListener("reset", handleReset);
+
+      return () => {
+        form.removeEventListener("reset", handleReset);
+      };
+    }, []);
 
     useEffect(() => {
       if (!isOpen && selectedOption) {
@@ -59,7 +91,12 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
     }, [isOpen, selectedOption]);
 
     useEffect(() => {
-      if (isOpen && highlightedIndex >= 0 && highlightedItemRef.current && optionsListRef.current) {
+      if (
+        isOpen &&
+        highlightedIndex >= 0 &&
+        highlightedItemRef.current &&
+        optionsListRef.current
+      ) {
         const container = optionsListRef.current;
         const item = highlightedItemRef.current;
         const containerRect = container.getBoundingClientRect();
@@ -105,6 +142,8 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
       setIsOpen(false);
       setHighlightedIndex(-1);
       setLocalErrorMessage("");
+
+      // Limpiar errores en el input (ya sea searchable o no)
       if (searchable) {
         if (ref && typeof ref !== "function" && ref.current) {
           ref.current.setCustomValidity("");
@@ -114,7 +153,9 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
           hiddenRef.current.setCustomValidity("");
         }
       }
-      if (onChange) onChange(selected.value);
+
+      // Enviar un objeto que simule un evento
+      if (onChange) onChange({ target: { name, value: selected.value } });
     };
 
     const handleFocus = () => {
@@ -130,19 +171,22 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
           return;
         }
       }
-      
+
       if (isOpen) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
-          setHighlightedIndex(prev =>
+          setHighlightedIndex((prev) =>
             prev < filteredOptions.length - 1 ? prev + 1 : prev
           );
         } else if (e.key === "ArrowUp") {
           e.preventDefault();
-          setHighlightedIndex(prev => (prev > 0 ? prev - 1 : 0));
+          setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
         } else if (e.key === "Enter") {
           e.preventDefault();
-          if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
+          if (
+            highlightedIndex >= 0 &&
+            highlightedIndex < filteredOptions.length
+          ) {
             handleSelect(filteredOptions[highlightedIndex]);
           }
         } else if (e.key === "Escape") {
@@ -156,7 +200,10 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(event.target as Node)
+        ) {
           setIsOpen(false);
         }
       };
@@ -174,13 +221,13 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
     };
 
     const filteredOptions = searchTerm
-      ? options.filter(opt =>
+      ? options.filter((opt) =>
           opt.label.toLowerCase().includes(searchTerm.toLowerCase())
         )
       : options;
-    
+
     const hasError = !!(errorMessage || localErrorMessage);
-    
+
     return (
       <div className={`relative mb-4 ${className}`} ref={containerRef}>
         <label className="block text-sm mb-1 text-primary">
@@ -188,29 +235,45 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
         </label>
         <div className="relative">
           {searchable ? (
-            <input
-              ref={ref}
-              type="text"
-              name={name}
-              value={inputValue}
-              onChange={handleInputChange}
-              onFocus={handleFocus}
-              onKeyDown={handleKeyDown}
-              onInvalid={handleInvalid}
-              placeholder={rest.placeholder || "Select an option..."}
-              required={required}
-              className={`w-full bg-transparent text-sm py-2 px-3 pr-8 text-left truncate focus:outline-none cursor-pointer ${
-                hasError 
-                  ? "border-red-500 focus:border-red-500 border-b"
-                  : "border-gray-300 focus:border-blue-500 border-b"
-              }`}
-              aria-invalid={hasError}
-              aria-expanded={isOpen}
-              role="combobox"
-              aria-autocomplete="list"
-              aria-haspopup="listbox"
-              {...rest}
-            />
+            <div className="relative">
+              <input
+                ref={ref}
+                type="text"
+                name={`${name}_label`} // Se cambia el nombre para que no lo tome el formulario
+                value={inputValue}
+                onChange={handleInputChange}
+                onFocus={handleFocus}
+                onKeyDown={handleKeyDown}
+                onInvalid={handleInvalid}
+                placeholder={placeholder || "Selecciona una opcion"}
+                required={required}
+                className={`w-full bg-transparent text-sm py-2 pl-3 pr-8 text-left truncate focus:outline-none cursor-pointer ${
+                  hasError
+                    ? "border-red-500 focus:border-red-500 border-b"
+                    : "border-gray-300 focus:border-blue-500 border-b"
+                }`}
+                aria-invalid={hasError}
+                aria-expanded={isOpen}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-haspopup="listbox"
+                {...rest}
+              />
+              {/* Input oculto con el valor real */}
+              {name && (
+                <input
+                  type="hidden"
+                  name={name} // Se mantiene el nombre correcto para el envío del formulario
+                  value={selectedOption ? selectedOption.value : ""}
+                />
+              )}
+              {/* Flechita en dropdown searchable */}
+              <ChevronDown
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 transition-transform ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </div>
           ) : (
             <div
               className={`relative w-full bg-transparent text-sm py-2 px-3 border-b text-left flex items-center justify-between truncate ${
@@ -218,33 +281,36 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
               } focus:outline-none focus:border-blue-500 cursor-pointer`}
               onClick={handleFocus}
             >
-              <span className={`truncate ${selectedOption ? "text-black" : "text-gray-500"}`}>
-                {selectedOption ? selectedOption.label : "Select an option"}
+              <span
+                className={`truncate ${
+                  selectedOption ? "text-black" : "text-gray-500"
+                }`}
+              >
+                {selectedOption
+                  ? selectedOption.label
+                  : placeholder || "Selecciona una opción"}
               </span>
               {name && (
                 <input
                   ref={hiddenRef}
-                  type="text"
+                  type="hidden"
                   name={name}
                   value={selectedOption ? selectedOption.value : ""}
-                  required={required}
-                  onChange={() => {}}
-                  onInvalid={handleInvalid}
-                  className="absolute opacity-0 w-px h-px pointer-events-none"
-
                 />
               )}
               <ChevronDown
-                className={`text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                className={`text-gray-500 transition-transform ${
+                  isOpen ? "rotate-180" : ""
+                }`}
               />
             </div>
           )}
 
           {isOpen && (
-            <ul 
+            <ul
               ref={optionsListRef}
               role="listbox"
-              className="absolute w-full bg-white shadow-md mt-1 max-h-40 overflow-y-auto rounded-md z-10" 
+              className="absolute w-full bg-white shadow-md mt-1 max-h-40 overflow-y-auto rounded-md z-10"
               onScroll={handleScroll}
             >
               {filteredOptions.length > 0 ? (
@@ -256,7 +322,9 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
                     role="option"
                     aria-selected={index === highlightedIndex}
                     className={`px-3 py-2 cursor-pointer text-left truncate ${
-                      index === highlightedIndex ? "bg-gray-300" : "hover:bg-gray-200"
+                      index === highlightedIndex
+                        ? "bg-gray-300"
+                        : "hover:bg-gray-200"
                     }`}
                     onMouseDown={() => handleSelect(option)}
                     onMouseEnter={() => setHighlightedIndex(index)}
@@ -271,10 +339,11 @@ export const Dropdown = React.forwardRef<HTMLInputElement, DropdownProps>(
           )}
         </div>
         {hasError && (
-          <p className="mt-1 text-xs text-red-500">{errorMessage || localErrorMessage}</p>
+          <p className="mt-1 text-xs text-red-500">
+            {errorMessage || localErrorMessage}
+          </p>
         )}
       </div>
     );
   }
-);
-
+)

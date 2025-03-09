@@ -34,6 +34,9 @@
   .bg-primary-light {
     background-color: var(--primary-light);
   }
+  .bg-primary-main {
+    background-color: var(--primary-main);
+  }
   .bg-primary-dark {
     background-color: var(--primary-dark);
   }
